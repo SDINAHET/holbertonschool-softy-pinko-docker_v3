@@ -111,6 +111,7 @@ When running your Docker image, your Flask server should spin up and accept requ
 You will need to make sure that you forward the Docker container’s port 5252 to the host machine’s port 5252 when running your image in a container.
 Example (your output may look different depending on your local environment and whether or not you have cached data):
 Terminal
+
 ```bash
 Dereks-MacBook-Pro:task1 derekwebb$ docker build -f ./Dockerfile -t softy-pinko:task1 .
 [+] Building 0.9s (12/12) FINISHED
@@ -178,6 +179,7 @@ server {
 At the end of this process, you should have a front end that is accessible like the following:
 
 Terminal
+
 ```bash
 Dereks-MacBook-Pro:task2 derekwebb$ docker build -f ./front-end/Dockerfile -t softy-pinko-front-end:task2 ./front-end
 [+] Building 0.6s (8/8) FINISHED
