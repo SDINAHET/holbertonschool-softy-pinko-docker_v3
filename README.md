@@ -242,8 +242,10 @@ First thing we should do is prepare the front-end. We need to add a couple of th
 
 New HTML to add
 
+```html
 <h1 id="dynamic-content"></h1>
 This needs to be added before the <h1> that includes the text “We provide the best strategy to grow up your business”.
+``
 
 index.html
 ```html
