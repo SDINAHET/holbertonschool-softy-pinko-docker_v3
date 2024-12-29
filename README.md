@@ -257,7 +257,7 @@ index.html
 </div>
 // . . . SOME HTML AFTER . . .
 ```
-This new <h1> tag with the ID of dynamic-content is the place we’re going to insert dynamic data from our API server.
+This new < h1> tag with the ID of dynamic-content is the place we’re going to insert dynamic data from our API server.
 
 Now we need to actually use some JavaScript code to make the request. Place the following script near the bottom of the HTML as the last <script> tag before the closing </body> tag.
 
