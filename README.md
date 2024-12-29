@@ -1,12 +1,14 @@
 Project badge
 100%
-Docker
+
+# Docker
  Novice
  By: Derek Webb
  Weight: 1
  Manual QA review was done by Arinhasvath Keophiphath on Dec 20, 2024 1:30 PM
-Description
-Context
+
+## Description
+### Context
 Docker is a platform that allows you to containerize your applications, meaning that you can package them into portable, self-contained environments which can run anywhere. This means that you can quickly move your application from one environment to another, such as from your local computer to a server, without worrying about dependencies or configuration issues. Docker achieves this by using containers, which are isolated environments that contain everything an application needs to run, such as libraries, dependencies, and configurations. Docker containers are lightweight and can be started and stopped quickly, making them ideal for modern software development and deployment. With Docker, you can also quickly scale your application by running multiple containers of the same application on different hosts (or the same host, as we will do in this project), and manage them using Docker Compose or other orchestration tools.
 
 Ultimately, what you will create in this project is an infrastructure for an application that utilizes a reverse proxy, a load balancer, two application servers, and one front-end server.
@@ -15,7 +17,7 @@ Let’s consider the following design:
 
 
 
-High-level Design
+### High-level Design
 In this design, there is a single server that acts as the entry point for your application. That server acts as a reverse proxy server, which routes traffic to either the API servers or the front-end static-content server; it also acts as a load balancer to balance traffic between the two API servers. When traffic comes in, the server will determine which service it needs to go to (either the front-end static-content server or the API server) and:
 
 If the request is to be routed to the front-end static-content server, it will do so and any static content that is returned from the front-end static-content server to the proxy server will then be sent to the client. The client isn’t directly communicating with the front-end static-content server.
@@ -37,7 +39,8 @@ Useful Resources
 Docker Cheatsheet
 Proxy vs Reverse Proxy (Real-world Examples)
 What is a Reverse Proxy? (vs. Forward Proxy) | Proxy servers explained (Stop at 06:25)
-Tasks
+
+## Tasks
 0. Create Your First Docker Image
 mandatory
 Score: 100.00% (Checks completed: 100.00%)
@@ -50,7 +53,7 @@ Once built, you can run the Docker image in a container and it will echo “Hell
 Example (your output may look different depending on your local environment and whether or not you have cached data):
 
 Terminal
-
+```bash
 Dereks-MacBook-Pro:docker-project derekwebb$ docker build -f ./Dockerfile -t softy-pinko:task0 .
 [+] Building 0.7s (7/7) FINISHED
  => [internal] load build definition from Dockerfile                                         0.0s
@@ -68,6 +71,7 @@ Dereks-MacBook-Pro:docker-project derekwebb$ docker build -f ./Dockerfile -t sof
 Dereks-MacBook-Pro:docker-project derekwebb$ docker run -it --rm --name softy-pinko-task0 softy-pinko:task0
 Hello, World!
 Dereks-MacBook-Pro:docker-project derekwebb$
+```
 Repo:
 
 GitHub repository: holbertonschool-softy-pinko-docker
@@ -90,7 +94,7 @@ Locally, create a Python file named api.py and paste the following Python script
 Hosting this Flask app on 0.0.0.0 instead of 127.0.0.1 means that it is reachable outside of the current machine (the current machine being a Docker container which is running inside of your laptop/desktop)
 Host this Flask app on port 5252
 api.py
-
+```python
 from flask import Flask
 
 app = Flask(__name__)
@@ -101,12 +105,13 @@ def hello_world():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5252)
+```
 In your Dockerfile, use /app as the working directory and copy the Python file to your Docker image
 When running your Docker image, your Flask server should spin up and accept requests
 You will need to make sure that you forward the Docker container’s port 5252 to the host machine’s port 5252 when running your image in a container.
 Example (your output may look different depending on your local environment and whether or not you have cached data):
 Terminal
-
+```bash
 Dereks-MacBook-Pro:task1 derekwebb$ docker build -f ./Dockerfile -t softy-pinko:task1 .
 [+] Building 0.9s (12/12) FINISHED
  => [internal] load build definition from Dockerfile                                         0.0s
@@ -135,6 +140,7 @@ WARNING: This is a development server. Do not use it in a production deployment.
  * Running on http://127.0.0.1:5252
  * Running on http://172.17.0.2:5252
 Press CTRL+C to quit
+```
 Browser
 
  (If the image above does not load, go to https://drive.google.com/uc?id=1thSkdrvRD7MYO1A7DJx73dzA6JygUZ-b)
@@ -164,14 +170,15 @@ Create an Nginx config file named softy-pinko-front-end.conf inside of the task2
 When researching Nginx config files, the only section you’ll need in the softy-pinko-front-end.conf file is the “server” section. Pay attention to the syntax used to set up a port to listen to (recommendation: port 9000), the name of the server, the location, and the index file to use.
 
 softy-pinko-front-end.conf
-
+```bash
 server {
 // Replace with your Nginx server configuration
 }
+```
 At the end of this process, you should have a front end that is accessible like the following:
 
 Terminal
-
+```bash
 Dereks-MacBook-Pro:task2 derekwebb$ docker build -f ./front-end/Dockerfile -t softy-pinko-front-end:task2 ./front-end
 [+] Building 0.6s (8/8) FINISHED
  => [internal] load build definition from Dockerfile                                                                                 0.0s
@@ -211,6 +218,7 @@ Dereks-MacBook-Pro:task2 derekwebb$ docker run -p 9000:9000 -it --rm --name soft
 2023/06/12 17:00:32 [notice] 1#1: start worker process 33
 2023/06/12 17:00:32 [notice] 1#1: start worker process 34
 2023/06/12 17:00:32 [notice] 1#1: start worker process 35
+```
 Browser
 
 If the image above does not load, go to https://drive.google.com/file/d/125rrSKiRI2whr4Uv9ydnJ5ZpcYWCIixQ
@@ -236,7 +244,7 @@ New HTML to add
 This needs to be added before the <h1> that includes the text “We provide the best strategy to grow up your business”.
 
 index.html
-
+```html
 // . . . SOME HTML BEFORE . . .
 <div class="offset-xl-3 col-xl-6 offset-lg-2 col-lg-8 col-md-12 col-sm-12">
     <h1 id="dynamic-content"></h1>
@@ -244,12 +252,14 @@ index.html
     <a href="#features" class="main-button-slider">Discover More</a>
 </div>
 // . . . SOME HTML AFTER . . .
+```
 This new <h1> tag with the ID of dynamic-content is the place we’re going to insert dynamic data from our API server.
 
 Now we need to actually use some JavaScript code to make the request. Place the following script near the bottom of the HTML as the last <script> tag before the closing </body> tag.
 
 Add this script to your index.html
 
+```js
 <script>
     // Load dynamic data from the back-end on port 5252
     $(function() {
@@ -263,12 +273,14 @@ Add this script to your index.html
         });
     });
 </script>
+```
 That is all the front-end needs to be able to connect to the back-end, however there is one more thing we must do to our back-end so that it can accept cross-origin requests from our front-end. We must use the CORS plugin for Flask.
 
 In your back-end’s back-end/Dockerfile, use pip3 to install flask-cors after you have installed flask through pip3. Next, use this updated python script as your api.py.
 
 api.py
 
+```python
 from flask import Flask
 from flask_cors import CORS
 
@@ -281,12 +293,14 @@ def hello_world():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5252)
+```
 Now, your back-end will allow your front-end to communicate with it even though they are not on the same server (they are on two different Docker containers).
 
 It should look like this:
 
 First terminal building/running the backend:
 
+```bash
 Dereks-MacBook-Pro:task3 derekwebb$ docker build -f ./back-end/Dockerfile -t softy-pinko-back-end:task3 ./back-end
 [+] Building 1.2s (13/13) FINISHED
  => [internal] load build definition from Dockerfile                                                                                                                                                                         0.0s
@@ -357,6 +371,7 @@ Dereks-MacBook-Pro:task3 derekwebb$ docker run -p 9000:9000 -it --rm --name soft
 2023/06/12 19:10:39 [notice] 1#1: start worker process 33
 2023/06/12 19:10:39 [notice] 1#1: start worker process 34
 2023/06/12 19:10:39 [notice] 1#1: start worker process 35
+```
 Browser
 
  If the image above does not load, go to https://drive.google.com/uc?id=18x9WulYaB3QTAxIsZbnypL3L95UGYkWc
@@ -380,6 +395,7 @@ Once you’ve set up your docker-compose.yml file with the correct services, you
 
 Terminal
 
+```bash
 Dereks-MacBook-Pro:task4 derekwebb$ docker-compose build
 [+] Building 1.3s (13/13) FINISHED
  => [internal] load build definition from Dockerfile                                                                       0.0s
@@ -487,6 +503,7 @@ task4-front-end-1  | 2023/06/12 19:27:43 [notice] 1#1: start worker process 32
 task4-front-end-1  | 2023/06/12 19:27:43 [notice] 1#1: start worker process 33
 task4-front-end-1  | 2023/06/12 19:27:43 [notice] 1#1: start worker process 34
 task4-front-end-1  | 2023/06/12 19:27:43 [notice] 1#1: start worker process 35
+```
 Important keywords to have in your docker-compose.yml file:
 
 services
@@ -515,16 +532,17 @@ Just like with our static-content server, we’re going to use Nginx for this pr
 For the proxy.conf file, the only section you’ll need in the proxy.conf file is the “server” section. You want this proxy server to be listening to port 80. Set up a location section for / and use proxy_pass to route any request coming in on that route to http://INSERT-YOUR-FRONT-END-DOCKER-COMPOSE-SERVICE-NAME-HERE:9000. Next, set up a location section for /api and use proxy_pass to route any request coming in on that route to http://INSERT-YOUR-BACK-END-DOCKER-COMPOSE-SERVICE-NAME-HERE:5252.
 
 proxy.conf
-
+```bash
 server {
     // Replace with your Nginx server configuration
 }
+```
 Note that you are using the same service name that you used in your docker-compose.yml file for the front and back ends. This is because Docker has an internal DNS that will setup routes to internal IP addresses for those names. This is a bit of “magic” that Docker does, but it makes it super convenient to not have to know the exact IP addresses of these services.
 
 Another thing that needs to be modified is the JavaScript that is used. It was previously calling the back-end server directly; instead, we want to have the JavaScript make an API call through the proxy server as well. Replace your JavaScript at the bottom of the index.html file with the following:
 
 JavaScript At Bottom Of index.html
-
+```js
 <script>
     // Load dynamic data from the back-end on port 5252
     $(function() {
@@ -538,12 +556,14 @@ JavaScript At Bottom Of index.html
         });
     });
 </script>
+```
 Next, we need to update the docker-compose.yml file to add a new service named proxy. Be sure to include the same sections as previously used: * build, context, dockerfile * image * ports * Map the container’s port 80 to the host machine’s port 80. * Note: You should remove the mapping for the front-end and back-end service to the host machine ports. You will want to have port 5252 and port 9000 open internally on the containers so that other Docker containers can reach them, but you do not want external clients reaching out directly to the front-end or the back-end; everything should go through the proxy server. If you do not map any ports, you will not be able to get past the firewall that Docker has put up. Docker uses something similar to Linux’s Uncomplicated Firewall ufw; you do not directly work with this firewall, but instead, map allowed ports in Dockerfiles or docker-compose files to allow/disallow access through certain ports. depends_on
 
 Your output should look something like this:
 
 Terminal
 
+```bash
 Dereks-MacBook-Pro:task5 derekwebb$ docker-compose build
 [+] Building 1.5s (13/13) FINISHED
  => [internal] load build definition from Dockerfile                                                                       0.0s
@@ -656,6 +676,7 @@ task5-proxy-1      | 2023/06/15 19:28:39 [notice] 1#1: start worker process 35
 task5-back-end-1   | 172.19.0.4 - - [15/Jun/2023 19:28:48] "GET /api/hello HTTP/1.0" 200 -
 task5-front-end-1  | 2023/06/15 19:28:49 [error] 30#30: *27 open() "/var/www/html/softy-pinko-front-end/favicon.ico" failed (2: No such file or directory), client: 172.19.0.4, server: softy-pinko-front-end, request: "GET /favicon.ico HTTP/1.0", host: "front-end:9000", referrer: "http://localhost/"
 The following image shows the browser hitting http://localhost:80, which is the proxy server.
+```
 
 Browser
 
@@ -684,6 +705,7 @@ Create a new file in the task6 directory named 2-api-servers.txt and put in the 
 
 Terminal
 
+```bash
 [+] Running 4/0
  ⠿ Container task6-back-end-2   Created                                                                                    0.0s
  ⠿ Container task6-back-end-1   Created                                                                                    0.0s
@@ -750,10 +772,11 @@ task6-proxy-1      | 2023/06/15 19:52:23 [notice] 1#1: start worker process 32
 task6-proxy-1      | 2023/06/15 19:52:23 [notice] 1#1: start worker process 33
 task6-proxy-1      | 2023/06/15 19:52:23 [notice] 1#1: start worker process 34
 task6-proxy-1      | 2023/06/15 19:52:23 [notice] 1#1: start worker process 35
+```
 If you go to the web page and reload it several times, your terminal output should look like this:
 
 Terminal
-
+```bash
 task6-back-end-1   | 172.20.0.5 - - [15/Jun/2023 19:53:55] "GET /api/hello HTTP/1.0" 200 -
 task6-back-end-2   | 172.20.0.5 - - [15/Jun/2023 19:53:57] "GET /api/hello HTTP/1.0" 200 -
 task6-back-end-1   | 172.20.0.5 - - [15/Jun/2023 19:53:58] "GET /api/hello HTTP/1.0" 200 -
@@ -762,10 +785,11 @@ task6-back-end-1   | 172.20.0.5 - - [15/Jun/2023 19:53:59] "GET /api/hello HTTP/
 task6-back-end-2   | 172.20.0.5 - - [15/Jun/2023 19:54:00] "GET /api/hello HTTP/1.0" 200 -
 task6-back-end-1   | 172.20.0.5 - - [15/Jun/2023 19:54:00] "GET /api/hello HTTP/1.0" 200 -
 task6-back-end-2   | 172.20.0.5 - - [15/Jun/2023 19:54:01] "GET /api/hello HTTP/1.0" 200 -
+```
 Note how the back-end server that the Nginx load-balancer routed to goes between the two different back-end servers. Here is an example with 5 back-end servers:
 
 Terminal
-
+```bash
 task6-back-end-2   | 172.20.0.8 - - [15/Jun/2023 19:55:21] "GET /api/hello HTTP/1.0" 200 -
 task6-back-end-5   | 172.20.0.8 - - [15/Jun/2023 19:55:22] "GET /api/hello HTTP/1.0" 200 -
 task6-back-end-1   | 172.20.0.8 - - [15/Jun/2023 19:55:23] "GET /api/hello HTTP/1.0" 200 -
@@ -781,6 +805,7 @@ task6-back-end-5   | 172.20.0.8 - - [15/Jun/2023 19:55:27] "GET /api/hello HTTP/
 task6-back-end-1   | 172.20.0.8 - - [15/Jun/2023 19:55:27] "GET /api/hello HTTP/1.0" 200 -
 task6-back-end-4   | 172.20.0.8 - - [15/Jun/2023 19:55:27] "GET /api/hello HTTP/1.0" 200 -
 task6-back-end-3   | 172.20.0.8 - - [15/Jun/2023 19:55:28] "GET /api/hello HTTP/1.0" 200 -
+```
 Repo:
 
 GitHub repository: holbertonschool-softy-pinko-docker
